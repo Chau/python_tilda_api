@@ -1,0 +1,4 @@
+
+
+class TildaException(Exception):
+    pass

@@ -1,0 +1,4 @@
+venv
+settings.ini
+*.pyc
+.idea/
