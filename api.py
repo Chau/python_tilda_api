@@ -54,12 +54,11 @@ class TildaApi:
 
     def get_projects_list(self):
         """
-        Get projects list of tilda.
-        :return: Dict
+        Return list of tilda account.
+
+        :return: List
         Example:
-            {
-              "status": "FOUND",
-              "result": [
+           [
                 {
                   "id": "0",
                   "title": "First Project",
@@ -72,25 +71,201 @@ class TildaApi:
                 },
                 ...
               ]
-            }
+
         """
         return self._api_call('getprojectslist')
 
     def get_project_info(self, project_id):
+        """
+        Return info of tilda project
+
+        :param project_id: int, id of tilda project
+        :return: Dict
+        Example:
+            {
+                "id": "0",
+                "title": "Project title",
+                "descr": "",
+                "customdomain": "project.ru",
+                "export_csspath": "",
+                "export_jspath": "",
+                "export_imgpath": "",
+                "indexpageid": "0",
+                "customcsstext": "y",
+                "favicon": "",
+                "page404id": "0",
+                "images": [
+                  {
+                    "from": "",
+                    "to": ""
+                  }
+                  ...
+                ]
+              }
+        """
         return self._api_call(api_name='getprojectinfo', api_params={'projectid': project_id})
 
     def get_pages_list(self, project_id):
+        """
+        Return pages list of tilda project
+        :param project_id: int
+        :return: List
+        Example:
+            [
+                {
+                  "id": "1001",
+                  "projectid": "0",
+                  "title": "Page title first",
+                  "descr": "",
+                  "img": "",
+                  "featureimg": "",
+                  "alias": "",
+                  "date": "2014-05-16 14:45:53",
+                  "sort": "80",
+                  "published": "1419702868",
+                  "filename": "page1001.html"
+                },
+                {
+                  "id": "1002",
+                  "projectid": "0",
+                  "title": "Page title second",
+                  "descr": "",
+                  "img": "",
+                  "featureimg": "",
+                  "alias": "",
+                  "date": "2014-05-17 10:50:00",
+                  "sort": "90",
+                  "published": "1419702277",
+                  "filename": "page1002.html"
+                },
+                ...
+              ]
+        """
         return self._api_call(api_name='getpageslist', api_params={'projectid': project_id})
 
     def get_page(self, page_id):
+        """
+        Return tilda page info + body-html code of the page
+        :param page_id: int
+        :return: Dict
+        Example:
+            {
+                "id": "1001",
+                "projectid": "0",
+                "title": "Page title",
+                "descr": "",
+                "img": "",
+                "featureimg": "",
+                "alias": "",
+                "date": "2014-05-16 14:45:53",
+                "sort": "80",
+                "published": "1419702868",
+                "html": "some html page code",
+                "filename": "page1001.html",
+                "js": [
+                  ...
+                ],
+                "css": [
+                  ...
+                ]
+            }
+        """
         return self._api_call(api_name='getpage', api_params={'pageid': page_id})
 
     def get_page_full(self, page_id):
+        """
+        Return full tilda page info + full html-code of the page
+        :param page_id: int
+        :return: Dict
+        Example:
+            {
+                "id": "1001",
+                "projectid": "0",
+                "title": "Page title",
+                "descr": "",
+                "img": "",
+                "featureimg": "",
+                "alias": "",
+                "date": "2014-05-16 14:45:53",
+                "sort": "80",
+                "published": "1419702868",
+                "html": "some html page code",
+                "filename": "page1001.html"
+            }
+        """
         return self._api_call(api_name='getpagefull', api_params={'pageid': page_id})
 
     def get_page_export(self, page_id):
+        """
+        Return tilda page info for export + body-html code of the page
+        :param page_id: int
+        :return: Dict
+        Example:
+            {
+                "id": "1001",
+                "projectid": "0",
+                "title": "Page title",
+                "descr": "",
+                "img": "",
+                "featureimg": "",
+                "alias": "",
+                "date": "2014-05-16 14:45:53",
+                "sort": "80",
+                "published": "1419702868",
+                "images": [
+                  {
+                    "from": "",
+                    "to": ""
+                  },
+                  {
+                    "from": "",
+                    "to": ""
+                  },
+                  {
+                    "from": "",
+                    "to": ""
+                  }
+                ],
+                "html": "body page html-code with local links to files",
+                "filename": "page1001.html"
+            }
+        """
         return self._api_call(api_name='getpageexport', api_params={'pageid': page_id})
 
     def get_page_full_export(self, page_id):
+        """
+        Return full tilda page info + full page html-code
+        :param page_id: int
+        :return: Dict
+        Example:
+            {
+                "id": "1001",
+                "projectid": "0",
+                "title": "Page title",
+                "descr": "",
+                "img": "",
+                "featureimg": "",
+                "alias": "",
+                "date": "2014-05-16 14:45:53",
+                "sort": "80",
+                "published": "1419702868",
+                "images": [
+                  {
+                    "from": "",
+                    "to": ""
+                  },
+                  {
+                    "from": "",
+                    "to": ""
+                  },
+                  {
+                    "from": "",
+                    "to": ""
+                  }
+                ],
+                "html": "full page html-code with local links to files",
+                "filename": "page1001.html"
+            }
+        """
         return self._api_call(api_name='getpagefullexport', api_params={'pageid': page_id})
 
