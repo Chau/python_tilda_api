@@ -20,8 +20,9 @@ class TildaApi:
         Read config and define values for tilda public key and tilda secret key
         """
         config = configparser.ConfigParser()
-        self.TILDA_PUBLICKEY = config['Tilda']['publickey']
-        self.TILDA_SECRETKEY = config['Tilda']['secretkey']
+        config.read('settings.ini')
+        self.TILDA_PUBLICKEY = config['tilda']['publickey']
+        self.TILDA_SECRETKEY = config['tilda']['secretkey']
 
     def _api_call(self, api_name, api_params=None):
         """
@@ -30,7 +31,8 @@ class TildaApi:
         :param api_params: Dict - GET-parameters. Example: {'projectid': 11111}
         :return: Dict or List - result of request to Tilda API
         """
-        param_str = '&'.join('{}={}'.format(k, v) for k, v in api_params.items())
+
+        param_str = '&'.join('{}={}'.format(k, v) for k, v in api_params.items()) if api_params else ''
         url = '{domen}{api_name}/?publickey={public_key}&secretkey={secret_key}&{params}'.format(
             domen=self.TILDA_API_DOMEN,
             api_name=api_name,
@@ -45,8 +47,8 @@ class TildaApi:
         )
 
         # handling data
-        result = json.loads(resp.read())
-        status = result.get('STATUS')
+        result = resp.read()
+        status = result.get('status')
         if status == 'FOUND':
             return result['result']
         elif status == 'ERROR':
