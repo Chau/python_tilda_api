@@ -16,17 +16,19 @@ class TildaApi:
     TIMEOUT = 5
 
     def __init__(self):
+        """
+        Read config and define values for tilda public key and tilda secret key
+        """
         config = configparser.ConfigParser()
         self.TILDA_PUBLICKEY = config['Tilda']['publickey']
         self.TILDA_SECRETKEY = config['Tilda']['secretkey']
-        self.error = ''
 
     def _api_call(self, api_name, api_params=None):
         """
         Call any API-function of tilda.
         :param api_name: string - name of API function
         :param api_params: Dict - GET-parameters. Example: {'projectid': 11111}
-        :return:
+        :return: Dict or List - result of request to Tilda API
         """
         param_str = '&'.join('{}={}'.format(k, v) for k, v in api_params.items())
         url = '{domen}{api_name}/?publickey={public_key}&secretkey={secret_key}&{params}'.format(

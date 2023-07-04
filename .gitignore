@@ -2,3 +2,4 @@ venv
 settings.ini
 *.pyc
 .idea/
+.pytest_cache/
