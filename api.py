@@ -6,6 +6,7 @@ import json
 import configparser
 
 from urllib.request import urlopen
+from urllib.parse import urlencode
 
 from exceptions import TildaException
 
@@ -31,9 +32,9 @@ class TildaApi:
         :param api_params: Dict - GET-parameters. Example: {'projectid': 11111}
         :return: Dict or List - result of request to Tilda API
         """
-
-        param_str = '&'.join('{}={}'.format(k, v) for k, v in api_params.items()) if api_params else ''
-        url = '{domen}{api_name}/?publickey={public_key}&secretkey={secret_key}&{params}'.format(
+        # make api url
+        param_str = '' if not api_params else '&' + urlencode(api_params)
+        url = '{domen}{api_name}/?publickey={public_key}&secretkey={secret_key}{params}'.format(
             domen=self.TILDA_API_DOMEN,
             api_name=api_name,
             public_key=self.TILDA_PUBLICKEY,
@@ -41,13 +42,10 @@ class TildaApi:
             params=param_str
         )
 
-        resp = urlopen(
-            url=url,
-            timeout=self.TIMEOUT
-        )
+        with urlopen(url=url, timeout=self.TIMEOUT) as resp:
+            result = resp.read()
 
         # handling data
-        result = resp.read()
         status = result.get('status')
         if status == 'FOUND':
             return result['result']
