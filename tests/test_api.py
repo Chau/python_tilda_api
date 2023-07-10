@@ -2,6 +2,7 @@ import json
 import pytest
 
 from api import TildaApi
+from exceptions import TildaException
 
 @pytest.fixture
 def project_list_request_success():
@@ -84,7 +85,7 @@ def pages_list_success():
 def api_calling_fail():
     return json.dumps(
         {
-            "status": "FOUND",
+            "status": "ERROR",
             "message": "error"
         }
     )
@@ -111,7 +112,15 @@ def test_get_projects_list_success(mocker, project_list_request_success):
                                 },
                               ]
 
-def test_get_project_list_fail()
+
+def test_get_project_list_fail(mocker, api_calling_fail):
+    mocker.patch('api.urlopen').return_value.__enter__.return_value.read = mocker.Mock(
+        return_value=api_calling_fail
+    )
+    # calls api function
+    tilda_api = TildaApi()
+    with pytest.raises(TildaException):
+        tilda_api.get_projects_list()
 
 
 def test_get_project_info(mocker, project_info_request_success):
