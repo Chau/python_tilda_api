@@ -15,6 +15,15 @@ class TildaApi:
 
     TILDA_API_DOMEN = 'https://api.tildacdn.info/v1/'
     TIMEOUT = 5
+    TILDA_API_NAMES = [
+        'getprojectslist',
+        'getprojectinfo',
+        'getpageslist',
+        'getpage',
+        'getpagefull',
+        'getpageexport',
+        'getpagefullexport'
+    ]
 
     def __init__(self):
         """
@@ -32,6 +41,10 @@ class TildaApi:
         :param api_params: Dict - GET-parameters. Example: {'projectid': 11111}
         :return: Dict or List - result of request to Tilda API
         """
+        # check api name
+        if api_name not in self.TILDA_API_NAMES:
+            raise ValueError('Wrong API function name')
+
         # make api url
         param_str = '' if not api_params else '&' + urlencode(api_params)
         url = '{domen}{api_name}/?publickey={public_key}&secretkey={secret_key}{params}'.format(
@@ -73,7 +86,6 @@ class TildaApi:
                 },
                 ...
               ]
-
         """
         return self._api_call('getprojectslist')
 

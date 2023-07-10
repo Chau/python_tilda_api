@@ -494,3 +494,9 @@ def test_get_page_full_export_fail(mocker, api_calling_fail):
     tilda_api = TildaApi()
     with pytest.raises(TildaException):
         tilda_api.get_page_full_export(page_id=1)
+
+
+def test_wrong_api_func_name():
+    tilda_api = TildaApi()
+    with pytest.raises(ValueError):
+        tilda_api._api_call(api_name='wrongname')
