@@ -1,10 +1,11 @@
+import json
 import pytest
 
 from api import TildaApi
 
 @pytest.fixture
 def project_list_request_success():
-    return {
+    return json.dumps({
               "status": "FOUND",
               "result": [
                 {
@@ -18,11 +19,11 @@ def project_list_request_success():
                   "descr": ""
                 },
               ]
-            }
+            })
 
 @pytest.fixture
 def project_info_request_success():
-    return {
+    return json.dumps({
               "status": "FOUND",
               "result": {
                 "id": "1",
@@ -43,16 +44,58 @@ def project_info_request_success():
                   }
                 ]
               }
-            }
+            })
+
+@pytest.fixture
+def pages_list_success():
+    return json.dumps({
+              "status": "FOUND",
+              "result": [
+                {
+                  "id": "1001",
+                  "projectid": "1",
+                  "title": "Page title first",
+                  "descr": "",
+                  "img": "",
+                  "featureimg": "",
+                  "alias": "",
+                  "date": "2014-05-16 14:45:53",
+                  "sort": "80",
+                  "published": "1419702868",
+                  "filename": "page1001.html"
+                },
+                {
+                  "id": "1002",
+                  "projectid": "1",
+                  "title": "Page title second",
+                  "descr": "",
+                  "img": "",
+                  "featureimg": "",
+                  "alias": "",
+                  "date": "2014-05-17 10:50:00",
+                  "sort": "90",
+                  "published": "1419702277",
+                  "filename": "page1002.html"
+                },
+              ]
+            })
+
+@pytest.fixture
+def api_calling_fail():
+    return json.dumps(
+        {
+            "status": "FOUND",
+            "message": "error"
+        }
+    )
 
 
-def test_get_project_list(mocker, project_list_request_success):
+def test_get_projects_list_success(mocker, project_list_request_success):
     # Creates a fake requests response object
-    fake_resp = mocker.Mock()
-    # Mock method to return the project list data
-    fake_resp.read = mocker.Mock(return_value=project_list_request_success)
-    mocker.patch('api.urlopen', return_value=fake_resp)
-
+    mocker.patch('api.urlopen').return_value.__enter__.return_value.read = mocker.Mock(
+        return_value=project_list_request_success
+    )
+    # calls api function
     tilda_api = TildaApi()
     projects_list = tilda_api.get_projects_list()
     assert projects_list == [
@@ -68,12 +111,15 @@ def test_get_project_list(mocker, project_list_request_success):
                                 },
                               ]
 
+def test_get_project_list_fail()
+
 
 def test_get_project_info(mocker, project_info_request_success):
-    fake_resp = mocker.Mock()
-    fake_resp.read = mocker.Mock(return_value=project_info_request_success)
-    mocker.patch('api.urlopen', return_value=fake_resp)
-
+    # Creates a fake requests response object
+    mocker.patch('api.urlopen').return_value.__enter__.return_value.read = mocker.Mock(
+        return_value=project_info_request_success
+    )
+    # calls api function
     tilda_api = TildaApi()
     project_info = tilda_api.get_project_info(project_id=1)
     assert project_info == {
@@ -95,3 +141,41 @@ def test_get_project_info(mocker, project_info_request_success):
                                   }
                                 ]
                               }
+
+
+def test_get_pages_list(mocker, pages_list_success):
+    # Creates a fake requests response object
+    mocker.patch('api.urlopen').return_value.__enter__.return_value.read = mocker.Mock(
+        return_value=pages_list_success
+    )
+    # calls api function
+    tilda_api = TildaApi()
+    pages_list = tilda_api.get_pages_list(project_id=1)
+    assert pages_list == [
+                            {
+                              "id": "1001",
+                              "projectid": "1",
+                              "title": "Page title first",
+                              "descr": "",
+                              "img": "",
+                              "featureimg": "",
+                              "alias": "",
+                              "date": "2014-05-16 14:45:53",
+                              "sort": "80",
+                              "published": "1419702868",
+                              "filename": "page1001.html"
+                            },
+                            {
+                              "id": "1002",
+                              "projectid": "1",
+                              "title": "Page title second",
+                              "descr": "",
+                              "img": "",
+                              "featureimg": "",
+                              "alias": "",
+                              "date": "2014-05-17 10:50:00",
+                              "sort": "90",
+                              "published": "1419702277",
+                              "filename": "page1002.html"
+                            },
+                          ]

@@ -43,7 +43,7 @@ class TildaApi:
         )
 
         with urlopen(url=url, timeout=self.TIMEOUT) as resp:
-            result = resp.read()
+            result = json.loads(resp.read())
 
         # handling data
         status = result.get('status')
