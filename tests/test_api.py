@@ -151,6 +151,15 @@ def test_get_project_info(mocker, project_info_request_success):
                                 ]
                               }
 
+def test_get_project_info_fail(mocker, api_calling_fail):
+    mocker.patch('api.urlopen').return_value.__enter__.return_value.read = mocker.Mock(
+        return_value=api_calling_fail
+    )
+    # calls api function
+    tilda_api = TildaApi()
+    with pytest.raises(TildaException):
+        tilda_api.get_project_info(project_id=1)
+
 
 def test_get_pages_list(mocker, pages_list_success):
     # Creates a fake requests response object
