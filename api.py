@@ -16,15 +16,13 @@ class TildaApi:
 
     TILDA_API_DOMEN = 'https://api.tildacdn.info/v1/'
     TIMEOUT = 5
-    TILDA_API_NAMES = [
-        'getprojectslist',
-        'getprojectinfo',
-        'getpageslist',
-        'getpage',
-        'getpagefull',
-        'getpageexport',
-        'getpagefullexport'
-    ]
+    GET_PROJECTS_LIST = 'getprojectslist'
+    GET_PROJECT_INFO = 'getprojectinfo'
+    GET_PAGES_LIST = 'getpageslist'
+    GET_PAGE = 'getpage'
+    GET_PAGE_FULL = 'getpagefull'
+    GET_PAGE_EXPORT = 'getpageexport'
+    GET_PAGE_FULL_EXPORT = 'getpagefullexport'
 
     def __init__(self):
         """
@@ -34,6 +32,15 @@ class TildaApi:
         config.read('settings.ini')
         self.TILDA_PUBLICKEY = config['tilda']['publickey']
         self.TILDA_SECRETKEY = config['tilda']['secretkey']
+        self.TILDA_API_NAMES = [
+                                    self.GET_PROJECTS_LIST,
+                                    self.GET_PROJECT_INFO,
+                                    self.GET_PAGES_LIST,
+                                    self.GET_PAGE,
+                                    self.GET_PAGE_FULL,
+                                    self.GET_PAGE_EXPORT,
+                                    self.GET_PAGE_FULL_EXPORT
+                            ]
 
     def _api_call(self, api_name: str, api_params: t.Dict = None):
         """
@@ -88,7 +95,7 @@ class TildaApi:
                 ...
               ]
         """
-        return self._api_call('getprojectslist')
+        return self._api_call(self.GET_PROJECTS_LIST)
 
     def get_project_info(self, project_id: int) -> t.Dict:
         """
@@ -118,7 +125,7 @@ class TildaApi:
                 ]
               }
         """
-        return self._api_call(api_name='getprojectinfo', api_params={'projectid': project_id})
+        return self._api_call(api_name=self.GET_PROJECT_INFO, api_params={'projectid': project_id})
 
     def get_pages_list(self, project_id: int) -> t.List:
         """
@@ -185,7 +192,7 @@ class TildaApi:
                 ]
             }
         """
-        return self._api_call(api_name='getpage', api_params={'pageid': page_id})
+        return self._api_call(api_name=self.GET_PAGE, api_params={'pageid': page_id})
 
     def get_page_full(self, page_id: int) -> t.Dict:
         """
@@ -208,7 +215,7 @@ class TildaApi:
                 "filename": "page1001.html"
             }
         """
-        return self._api_call(api_name='getpagefull', api_params={'pageid': page_id})
+        return self._api_call(api_name=self.GET_PAGE_FULL, api_params={'pageid': page_id})
 
     def get_page_export(self, page_id: int) -> t.Dict:
         """
@@ -245,7 +252,7 @@ class TildaApi:
                 "filename": "page1001.html"
             }
         """
-        return self._api_call(api_name='getpageexport', api_params={'pageid': page_id})
+        return self._api_call(api_name=self.GET_PAGE_EXPORT, api_params={'pageid': page_id})
 
     def get_page_full_export(self, page_id: int) -> t.Dict:
         """
@@ -282,5 +289,5 @@ class TildaApi:
                 "filename": "page1001.html"
             }
         """
-        return self._api_call(api_name='getpagefullexport', api_params={'pageid': page_id})
+        return self._api_call(api_name=self.GET_PAGE_FULL_EXPORT, api_params={'pageid': page_id})
 
