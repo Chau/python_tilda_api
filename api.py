@@ -3,6 +3,7 @@ Class for accessing to Tilda API.
 Tilda API documentation: https://help-ru.tilda.cc/api
 """
 import json
+import typing as t
 import configparser
 
 from urllib.request import urlopen
@@ -34,7 +35,7 @@ class TildaApi:
         self.TILDA_PUBLICKEY = config['tilda']['publickey']
         self.TILDA_SECRETKEY = config['tilda']['secretkey']
 
-    def _api_call(self, api_name, api_params=None):
+    def _api_call(self, api_name: str, api_params: t.Dict = None):
         """
         Call any API-function of tilda.
         :param api_name: string - name of API function
@@ -67,7 +68,7 @@ class TildaApi:
         else:
             raise TildaException('Unknown error')
 
-    def get_projects_list(self):
+    def get_projects_list(self) -> t.List:
         """
         Return list of tilda account.
 
@@ -89,7 +90,7 @@ class TildaApi:
         """
         return self._api_call('getprojectslist')
 
-    def get_project_info(self, project_id):
+    def get_project_info(self, project_id: int) -> t.Dict:
         """
         Return info of tilda project
 
@@ -119,7 +120,7 @@ class TildaApi:
         """
         return self._api_call(api_name='getprojectinfo', api_params={'projectid': project_id})
 
-    def get_pages_list(self, project_id):
+    def get_pages_list(self, project_id: int) -> t.List:
         """
         Return pages list of tilda project
         :param project_id: int
@@ -157,7 +158,7 @@ class TildaApi:
         """
         return self._api_call(api_name='getpageslist', api_params={'projectid': project_id})
 
-    def get_page(self, page_id):
+    def get_page(self, page_id: int) -> t.Dict:
         """
         Return tilda page info + body-html code of the page
         :param page_id: int
@@ -186,7 +187,7 @@ class TildaApi:
         """
         return self._api_call(api_name='getpage', api_params={'pageid': page_id})
 
-    def get_page_full(self, page_id):
+    def get_page_full(self, page_id: int) -> t.Dict:
         """
         Return full tilda page info + full html-code of the page
         :param page_id: int
@@ -209,7 +210,7 @@ class TildaApi:
         """
         return self._api_call(api_name='getpagefull', api_params={'pageid': page_id})
 
-    def get_page_export(self, page_id):
+    def get_page_export(self, page_id: int) -> t.Dict:
         """
         Return tilda page info for export + body-html code of the page
         :param page_id: int
@@ -246,7 +247,7 @@ class TildaApi:
         """
         return self._api_call(api_name='getpageexport', api_params={'pageid': page_id})
 
-    def get_page_full_export(self, page_id):
+    def get_page_full_export(self, page_id: int) -> t.Dict:
         """
         Return full tilda page info + full page html-code
         :param page_id: int
