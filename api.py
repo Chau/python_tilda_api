@@ -1,6 +1,19 @@
 """
 Class for accessing to Tilda API.
+About Tilda: https://tilda.cc
 Tilda API documentation: https://help-ru.tilda.cc/api
+
+Класс для доступа к аккаунту на Тильде через API.
+Что такое Тильда: https://tilda.cc/ru/
+Документация по API: https://help-ru.tilda.cc/api
+
+Usage/Использование:
+
+tilda_api = TildaApi()
+try:
+    projects = tilda_api.get_projects_list()
+except:
+    # handling exception
 """
 import json
 import typing as t
@@ -16,6 +29,7 @@ class TildaApi:
 
     TILDA_API_DOMEN = 'https://api.tildacdn.info/v1/'
     TIMEOUT = 5
+    # API functions names
     GET_PROJECTS_LIST = 'getprojectslist'
     GET_PROJECT_INFO = 'getprojectinfo'
     GET_PAGES_LIST = 'getpageslist'
@@ -26,12 +40,15 @@ class TildaApi:
 
     def __init__(self):
         """
-        Read config and define values for tilda public key and tilda secret key
+        Read config and define values for Tilda publickey and Tilda secretkey
+
+        Чтение конфига. Инициализация переменных, содержащих значение publickey и secretkey
         """
         config = configparser.ConfigParser()
         config.read('settings.ini')
         self.TILDA_PUBLICKEY = config['tilda']['publickey']
         self.TILDA_SECRETKEY = config['tilda']['secretkey']
+        # define allowbable names of tilda API functions
         self.TILDA_API_NAMES = [
                                     self.GET_PROJECTS_LIST,
                                     self.GET_PROJECT_INFO,
@@ -44,7 +61,8 @@ class TildaApi:
 
     def _api_call(self, api_name: str, api_params: t.Dict = None):
         """
-        Call any API-function of tilda.
+        Call any API-function of Tilda.
+        Вызов любой API-функции Тильды
         :param api_name: string - name of API function
         :param api_params: Dict - GET-parameters. Example: {'projectid': 11111}
         :return: Dict or List - result of request to Tilda API
@@ -77,8 +95,8 @@ class TildaApi:
 
     def get_projects_list(self) -> t.List:
         """
-        Return list of tilda account.
-
+        Return list of Tilda account projects.
+        Возвращает список всех проект в аккаунте Тильды
         :return: List
         Example:
            [
@@ -99,7 +117,8 @@ class TildaApi:
 
     def get_project_info(self, project_id: int) -> t.Dict:
         """
-        Return info of tilda project
+        Return info of Tilda project
+        Возвращает информацию по проекте в Тильде
 
         :param project_id: int, id of tilda project
         :return: Dict
@@ -130,6 +149,7 @@ class TildaApi:
     def get_pages_list(self, project_id: int) -> t.List:
         """
         Return pages list of tilda project
+        Возвращает список страниц в проекте
         :param project_id: int
         :return: List
         Example:
@@ -168,6 +188,7 @@ class TildaApi:
     def get_page(self, page_id: int) -> t.Dict:
         """
         Return tilda page info + body-html code of the page
+        Возвращает информацию о странице + body html-код
         :param page_id: int
         :return: Dict
         Example:
@@ -197,6 +218,7 @@ class TildaApi:
     def get_page_full(self, page_id: int) -> t.Dict:
         """
         Return full tilda page info + full html-code of the page
+        Возвращает информацию о странице + полный html-код
         :param page_id: int
         :return: Dict
         Example:
@@ -220,6 +242,7 @@ class TildaApi:
     def get_page_export(self, page_id: int) -> t.Dict:
         """
         Return tilda page info for export + body-html code of the page
+        Возвращает информацию о странице для экспорта + body page html-code
         :param page_id: int
         :return: Dict
         Example:
@@ -257,6 +280,7 @@ class TildaApi:
     def get_page_full_export(self, page_id: int) -> t.Dict:
         """
         Return full tilda page info + full page html-code
+        Возвращает информацию о странице для экспорта + full page html-code
         :param page_id: int
         :return: Dict
         Example:
